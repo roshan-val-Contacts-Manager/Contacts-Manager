@@ -3,6 +3,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +13,10 @@ public class Contacts {
     public static String directory = "contacts";
     public static String contactsFile = "contacts.txt";
     public static Path contactsPath = Paths.get(directory, contactsFile);
+
+    public static void makeDir() {
+//        if(Files.notExists())
+    }
 
     public static void viewContacts() {
         //print contacts
@@ -36,7 +41,7 @@ public class Contacts {
             System.out.println("Enter full name ");
             Scanner scanner = new Scanner(System.in);
             String userResponse = scanner.nextLine();
-            Files.write(contactsPath, Arrays.asList(userResponse), StandardOpenOption.APPEND);
+            Files.write(contactsPath, userResponse.getBytes(), StandardOpenOption.APPEND);
             System.out.println();
         } catch (IOException e) {
             System.out.println("There was an issue adding the contact");
@@ -64,12 +69,29 @@ public class Contacts {
         }
 
     }
-//
-//    public deleteContact() {
-//        //read in contacts as list
-//        //remove contact if it matches
-//        //update file
-//    }
+
+    public static void deleteContact() {
+        //read in contacts as list
+        //remove contact if it matches
+        //update file
+        System.out.println("Delete Contact: ");
+        try {
+            List<String> contactList = Files.readAllLines(contactsPath);
+            List<String> updatedContacts = new ArrayList<>();
+            System.out.println("Delete name or number: ");
+            Scanner scan = new Scanner(System.in);
+            String userResponse = scan.nextLine();
+            for (String contact : contactList) {
+                if(!contact.toLowerCase().contains(userResponse.toLowerCase())) {
+                    updatedContacts.add(contact);
+                }
+            }
+            Files.write(contactsPath, updatedContacts, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.out.println("There was an issue searching contact");
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -99,6 +121,8 @@ public class Contacts {
                 addContact();
             } else if (userResponse == 3) {
                 searchContact();
+            } else if(userResponse == 4) {
+                deleteContact();
             }
         }
     }
