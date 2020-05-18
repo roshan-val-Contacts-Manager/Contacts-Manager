@@ -2,22 +2,28 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Contacts {
     public static String directory = "contacts";
+    public static Path contactsDirectory = Paths.get(directory);
     public static String contactsFile = "contacts.txt";
-    public static Path contactsPath = Paths.get(directory, contactsFile);
+    public static Path contactsFilePath = Paths.get(directory, contactsFile);
+
 
     public static void main(String[] args) {
-        //while loop that prompts users for a number
-        //exit when 5 is entered
-        //call method that correlates with the number input
-        try {
-            List<String> contactList = Files.readAllLines(contactsPath);
+        makeDir(contactsDirectory);
+        createFile(contactsFilePath);
 
+        //while loop that prompts users for a number
+        //exit loop when 5 is entered
+        //call method that correlates with the number input
+
+        try {
+            List<String> contactList = Files.readAllLines(contactsFilePath);
 
             boolean running = true;
             while (running) {
@@ -33,9 +39,11 @@ public class Contacts {
                 Scanner scanner = new Scanner(System.in);
                 int userResponse = scanner.nextInt();
                 if (userResponse == 5) {
-                    //write to file
+                    Files.write(contactsFilePath, contactList, StandardOpenOption.TRUNCATE_EXISTING);
                     running = false;
                 } else if (userResponse == 1) {
+                    System.out.println("Name | Phone number");
+                    System.out.println("-------------------");
                     viewContacts(contactList);
                 } else if (userResponse == 2) {
                     contactList.add(getNewContact());
@@ -52,15 +60,30 @@ public class Contacts {
             e.printStackTrace();
         }
     }
+    //Makes Directory
+    public static void makeDir(Path dir) {
+        if(Files.notExists(dir)){
+            try {
+                Files.createDirectories(dir);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-//    public static void makeDir() {
-////        if(Files.notExists())
-//    }
+    //Creates File
+    public static void createFile(Path file){
+        if(Files.notExists(file)){
+            try {
+                Files.createFile(file);
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
 
 
-    // Files.write(contactsPath, updatedContacts, StandardOpenOption.TRUNCATE_EXISTING);
-
-
+    //View Contacts
     public static void viewContacts(List<String> contactList) {
         //print contacts
         for (int i = 0; i < contactList.size(); i += 1) {
@@ -68,13 +91,18 @@ public class Contacts {
         }
     }
 
+    //Create a new contact
     public static String getNewContact() {
+        Scanner scanner = new Scanner(System.in);
         //prompt and take in name + number
         // add a contact to a file.
         System.out.println("Enter full name ");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+        String userEnteredFullName = scanner.nextLine();
+        System.out.println("Enter phone number ");
+        String phoneNumber = scanner.nextLine();
+        return userEnteredFullName + " | " + phoneNumber;
     }
+
 
 //    public static List<String>  addContact(List<String> contactList) {
 //        //prompt and take in name + number
@@ -87,6 +115,7 @@ public class Contacts {
 //        return contactList;
 //    }
 
+    //Search Contacts
     public static List<String> searchContact(List<String> contactList) {
         List<String> updatedContacts = new ArrayList<>();
         Scanner scan = new Scanner(System.in);
@@ -118,7 +147,7 @@ public class Contacts {
 //            }
 //        }
 
-
+    //Deletes Contact
     public static List<String> deleteContact(List<String> contactList) {
         List<String> updatedContacts = new ArrayList<>();
         Scanner scan = new Scanner(System.in);
@@ -132,4 +161,5 @@ public class Contacts {
         }
         return updatedContacts;
     }
+
 }
