@@ -23,8 +23,9 @@ public class Contacts {
                 System.out.println((i + 1) + ": " + contactList.get(i));
             }
             System.out.println();
-        } catch (Exception IOException){
-            System.out.println("f this");
+        } catch (IOException e) {
+            System.out.println("There was an issue reading the contact list");
+            e.printStackTrace();
         }
     }
 
@@ -44,10 +45,25 @@ public class Contacts {
     }
 
 
-//    public searchContact() {
-//        //find and print if a contact exists
-//        //if contact exists, print it
-//    }
+    public static void searchContact() {
+        try {
+            List<String> contactList = Files.readAllLines(contactsPath);
+            //find and print if a contact exists
+            //if contact exists, print it
+            System.out.println("Enter name or number: ");
+            Scanner scan = new Scanner(System.in);
+            String userResponse = scan.nextLine();
+            for (String contact : contactList) {
+                if(contact.toLowerCase().contains(userResponse.toLowerCase())) {
+                    System.out.println(contact);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("There was an issue searching contact");
+            e.printStackTrace();
+        }
+
+    }
 //
 //    public deleteContact() {
 //        //read in contacts as list
@@ -63,24 +79,26 @@ public class Contacts {
         //call method that correlates with the number input
 
         boolean running = true;
-        while(running) {
+        while (running) {
             System.out.println("1. View contacts.\n" +
-                                "2. Add a new contact.\n" +
-                                "3. Search a contact by name.\n" +
-                                "4. Delete an existing contact.\n" +
-                                "5. Exit.\n" +
-                                "Enter an option (1, 2, 3, 4 or 5):");
+                    "2. Add a new contact.\n" +
+                    "3. Search a contact by name.\n" +
+                    "4. Delete an existing contact.\n" +
+                    "5. Exit.\n" +
+                    "Enter an option (1, 2, 3, 4 or 5):");
 
             System.out.println("Enter your selection between 1-5");
             System.out.println();
             Scanner scanner = new Scanner(System.in);
             int userResponse = scanner.nextInt();
-            if(userResponse == 5){
+            if (userResponse == 5) {
                 running = false;
-            } else if (userResponse == 1){
+            } else if (userResponse == 1) {
                 viewContacts();
-            } else if (userResponse == 2){
+            } else if (userResponse == 2) {
                 addContact();
+            } else if (userResponse == 3) {
+                searchContact();
             }
         }
     }
