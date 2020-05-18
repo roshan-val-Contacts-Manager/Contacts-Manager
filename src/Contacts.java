@@ -18,10 +18,6 @@ public class Contacts {
         makeDir(contactsDirectory);
         createFile(contactsFilePath);
 
-        //while loop that prompts users for a number
-        //exit loop when 5 is entered
-        //call method that correlates with the number input
-
         try {
             List<String> contactList = Files.readAllLines(contactsFilePath);
 
@@ -81,7 +77,6 @@ public class Contacts {
             }
         }
     }
-
 
     //View Contacts
     public static void viewContacts(List<String> contactList) {
@@ -161,5 +156,4 @@ public class Contacts {
         }
         return updatedContacts;
     }
-
 }
