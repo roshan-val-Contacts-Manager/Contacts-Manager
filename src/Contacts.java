@@ -8,11 +8,41 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Contacts {
     public static String directory = "contacts";
     public static String contactsFile = "contacts.txt";
     public static Path contactsPath = Paths.get(directory, contactsFile);
+
+    public static void main(String[] args) {
+        //while loop that prompts users for a number
+        //exit when 5 is entered
+        //call method that correlates with the number input
+        boolean running = true;
+        while (running) {
+            System.out.println("1. View contacts.\n" +
+                    "2. Add a new contact.\n" +
+                    "3. Search a contact by name.\n" +
+                    "4. Delete an existing contact.\n" +
+                    "5. Exit.\n" +
+                    "Enter an option (1, 2, 3, 4 or 5):");
+
+            System.out.println("Enter your selection between 1-5");
+            System.out.println();
+            Scanner scanner = new Scanner(System.in);
+            int userResponse = scanner.nextInt();
+            if (userResponse == 5) {
+                running = false;
+            } else if (userResponse == 1) {
+                viewContacts();
+            } else if (userResponse == 2) {
+                addContact();
+            } else if (userResponse == 3) {
+                searchContact();
+            } else if(userResponse == 4) {
+                deleteContact();
+            }
+        }
+    }
 
     public static void makeDir() {
 //        if(Files.notExists())
@@ -48,7 +78,6 @@ public class Contacts {
             e.printStackTrace();
         }
     }
-
 
     public static void searchContact() {
         try {
@@ -90,40 +119,6 @@ public class Contacts {
         } catch (IOException e) {
             System.out.println("There was an issue searching contact");
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-
-
-        //while loop that prompts users for a number
-        //exit when 5 is entered
-        //call method that correlates with the number input
-
-        boolean running = true;
-        while (running) {
-            System.out.println("1. View contacts.\n" +
-                    "2. Add a new contact.\n" +
-                    "3. Search a contact by name.\n" +
-                    "4. Delete an existing contact.\n" +
-                    "5. Exit.\n" +
-                    "Enter an option (1, 2, 3, 4 or 5):");
-
-            System.out.println("Enter your selection between 1-5");
-            System.out.println();
-            Scanner scanner = new Scanner(System.in);
-            int userResponse = scanner.nextInt();
-            if (userResponse == 5) {
-                running = false;
-            } else if (userResponse == 1) {
-                viewContacts();
-            } else if (userResponse == 2) {
-                addContact();
-            } else if (userResponse == 3) {
-                searchContact();
-            } else if(userResponse == 4) {
-                deleteContact();
-            }
         }
     }
 }
